@@ -9,34 +9,36 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.models.Person;
 import com.example.demo.repository.PersonRepository;
 
 @RestController
+@RequestMapping("/person")
 public class PersonController {
 
 	@Autowired
 	PersonRepository personRepository;
 
 
-	@GetMapping("/person")
+	@GetMapping("/")
 	public List<Person> findAll() {
 		return this.personRepository.findAll();
 	}
 
-	@GetMapping("/person/{id}")
+	@GetMapping("/{id}")
 	public Person findById(@PathVariable long id) throws Exception {
 		return this.personRepository.findById(id).orElseThrow(() -> new Exception("La personne n'existe pas"));
 	}
 
-	@PostMapping("/person")
+	@PostMapping("/")
 	public Person savePerson(@RequestBody Person person) {
 		return this.personRepository.save(person);
 	}
 
-	@PutMapping
+	@PutMapping("/")
 	Person updatePerson(@RequestBody Person person, @PathVariable long id) {
 		return this.personRepository.findById(id).map(x -> {
 			x.setName(person.getName());
@@ -48,7 +50,7 @@ public class PersonController {
 		});
 	}
 
-	@DeleteMapping("/person/{id}")
+	@DeleteMapping("/{id}")
 	 void deleteById(@PathVariable Long id) { 
 		this.personRepository.deleteById(id); }
 	 
